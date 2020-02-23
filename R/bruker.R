@@ -526,6 +526,7 @@ read_bruker_pdata <- function(sample_path,
 #' \item{MLEV -> TOCSY (alias)}
 #' \item{HSQC -> HSQC}
 #' \item{HMBC -> HMBC}
+#' \item{PROTON -> PROTON}                        
 #' }
 #'
 #' The nuclei in the sample are set according to the pulse sequence and the
@@ -582,6 +583,12 @@ infer_dim_pulse_nuclei <- function(acqus_list) {
     output$pulse_sequence <- "HMBC"
     output$nuclei <- paste(acqus_list$acqus[NUCLEI][acqus_list$acqus[NUCLEI] != "off"], collapse = "-")
 
+    #' Not sure if this is proper way to add new pulse sequence: 
+  
+  } else if (grepl(pattern = "PROTON", x = experiment_name, ignore.case = TRUE)) {
+    output$pulse_sequence <- "PROTON"
+    output$nuclei <- acqus_list$acqus[["NUC1"]]
+    
   } else {
     warning("infer_dim_pulse_nuclei: Unknown Pulse Sequence in acqus$EXP field.\n",
             "Please add the pulse sequence '",experiment_name, "' to infer_dim_pulse_nuclei in R/bruker.R\n")
